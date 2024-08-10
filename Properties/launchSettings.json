@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Doom3ToDoomEternalConverter": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Projects\\IcedTech\\base\\maps\\game\\demo_mars_city1.map"
+    }
+  }
+}

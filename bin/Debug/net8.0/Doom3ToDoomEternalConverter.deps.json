@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Doom3ToDoomEternalConverter/1.0.0": {
+        "runtime": {
+          "Doom3ToDoomEternalConverter.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Doom3ToDoomEternalConverter/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
