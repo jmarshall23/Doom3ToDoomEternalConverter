@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 
 class Doom3ToDoomEternalConverter
 {
-    private const double DOOM3_TO_DOOMETERNAL_SCALE = 1.325 / 52.4934;
-    private const double DOOM3_TO_DOOMETERNAL_SCALETEX = 52.4934 / 1.325;
+    private const double DOOM3_TO_DOOMETERNAL_SCALE = 0.0195;
+    private const double DOOM3_TO_DOOMETERNAL_SCALETEX = 1.0f / 0.0195f;
 
     static void Main(string[] args)
     {
