@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 
 class Doom3ToDoomEternalConverter
 {
-    private const double DOOM3_TO_DOOMETERNAL_SCALE = 52.4934 / 1.325;
+    private const double DOOM3_TO_DOOMETERNAL_SCALE = 1.325 / 52.4934;
+    private const double DOOM3_TO_DOOMETERNAL_SCALETEX = 52.4934 / 1.325;
 
     static void Main(string[] args)
     {
@@ -71,7 +72,7 @@ class Doom3ToDoomEternalConverter
 
     static string AdjustDistValues(string line)
     {
-        string pattern = @"\(\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*\)";
+        string pattern = @"\(\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*\)\s*\(\s*\(\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*\)\s*\(\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*(-?\d+\.?\d*)\s*\)\s*\)";
         Match match = Regex.Match(line, pattern);
 
         if (match.Success)
@@ -81,13 +82,40 @@ class Doom3ToDoomEternalConverter
             string nz = match.Groups[3].Value;
             string dist = match.Groups[4].Value;
 
-            double scaledDist = Convert.ToDouble(dist) / DOOM3_TO_DOOMETERNAL_SCALE;
+            // Texture coordinates
+            string tu1 = match.Groups[5].Value;
+            string tv1 = match.Groups[6].Value;
+            string tw1 = match.Groups[7].Value;
+            string tu2 = match.Groups[8].Value;
+            string tv2 = match.Groups[9].Value;
+            string tw2 = match.Groups[10].Value;
 
-            // Ensure that the scaledDist is formatted as a fixed-point number with sufficient precision
-            string formattedScaledDist = scaledDist.ToString("F8"); // F8 indicates 8 decimal places
+            // Correctly calculate the scaling factor
+            double scalingFactor = DOOM3_TO_DOOMETERNAL_SCALE;
 
-            // Create the new line by reconstructing the entire match with the scaled and formatted dist value
-            string newLine = $"( {nx} {ny} {nz} {formattedScaledDist} )";
+            // Scale the dist value
+            double originalDist = Convert.ToDouble(dist);
+            double scaledDist = originalDist * scalingFactor;
+
+            // Scale the texture coordinates
+            double scaledTu1 = Convert.ToDouble(tu1) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+            double scaledTv1 = Convert.ToDouble(tv1) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+            double scaledTw1 = Convert.ToDouble(tw1) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+            double scaledTu2 = Convert.ToDouble(tu2) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+            double scaledTv2 = Convert.ToDouble(tv2) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+            double scaledTw2 = Convert.ToDouble(tw2) * DOOM3_TO_DOOMETERNAL_SCALETEX;
+
+            // Ensure that the scaled values are formatted as fixed-point numbers with sufficient precision
+            string formattedScaledDist = scaledDist.ToString("F8");
+            string formattedScaledTu1 = scaledTu1.ToString("F8");
+            string formattedScaledTv1 = scaledTv1.ToString("F8");
+            string formattedScaledTw1 = scaledTw1.ToString("F8");
+            string formattedScaledTu2 = scaledTu2.ToString("F8");
+            string formattedScaledTv2 = scaledTv2.ToString("F8");
+            string formattedScaledTw2 = scaledTw2.ToString("F8");
+
+            // Create the new line by reconstructing the entire match with the scaled and formatted values
+            string newLine = $"( {nx} {ny} {nz} {formattedScaledDist} ) ( ( {formattedScaledTu1} {formattedScaledTv1} {formattedScaledTw1} ) ( {formattedScaledTu2} {formattedScaledTv2} {formattedScaledTw2} ) )";
 
             // Replace the entire matched part in the original line
             return line.Replace(match.Value, newLine);
